@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron'
+import { app, protocol, BrowserWindow, globalShortcut } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -10,9 +10,13 @@ protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
+let win;
+
+app.allowRendererProcessReuse = false;
+
 async function createWindow() {
   // Create the browser window.
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
@@ -21,8 +25,13 @@ async function createWindow() {
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION
-    }
+    },
+    autoHideMenuBar: true
   })
+
+  if (!win) {
+    app.quit();
+  }
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -63,6 +72,25 @@ app.on('ready', async () => {
     }
   }
   createWindow()
+})
+
+app.on('browser-window-blur', () => {
+  console.log("blur !!");
+
+  globalShortcut.unregisterAll();
+})
+
+app.on('browser-window-focus', () => {
+  console.log('focus !!');
+
+  globalShortcut.register('Insert', () => {
+    let contents = win.webContents;
+
+    if (contents.isDevToolsOpened()) console.log('DevTools 닫습니다');
+    else console.log('DevTools 열립니다');
+
+    contents.toggleDevTools();
+  })
 })
 
 // Exit cleanly on request from parent process in development mode.
