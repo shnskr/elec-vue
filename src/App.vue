@@ -1,14 +1,17 @@
 <template>
   <TopMenu />
+  <BodyCanvas />
 </template>
 
 <script>
 import TopMenu from "@/components/TopMenu";
+import BodyCanvas from "@/components/BodyCanvas";
 
 export default {
   name: 'App',
   components: {
-    TopMenu
+    TopMenu,
+    BodyCanvas
   }
 }
 </script>
