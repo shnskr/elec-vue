@@ -11,7 +11,7 @@ export default {
   name: "TopMenu",
   methods: {
     btnClick: function () {
-      robot.moveMouse(100, 100);
+      robot.moveMouseSmooth(100, 100);
     }
   }
 }
@@ -20,5 +20,7 @@ export default {
 <style scoped>
 .container {
   height: 50px;
+  background: lightgray;
+  border-bottom: solid 1px darkgray;
 }
 </style>

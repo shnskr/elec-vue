@@ -83,7 +83,7 @@ app.on('browser-window-blur', () => {
 app.on('browser-window-focus', () => {
   console.log('focus !!');
 
-  globalShortcut.register('Insert', () => {
+  globalShortcut.register('f1', () => {
     let contents = win.webContents;
 
     if (contents.isDevToolsOpened()) console.log('DevTools 닫습니다');
